@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+set -e
+local domain_name=$1
+
+local www_root="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd
+
+local ack_grep=`which ack-grep`
+
+if ["$ack_grep" -eq ""]; then
+  ack_grep=`which ack`
+fi
+
+if ["$ack_grep" -eq ""]; then
+	echo "ack grep not found!"
+	exit 1;
+fi
+
+if [ "$domain_name" -eq "" ] ; then
+  echo -e "Specify the virtual host domain name:"
+  read domain_name
+fi
+
+#
+# Validate the domain name
+#
+local PATTERN="^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$";
+if [[ "$domain_name" =~ $PATTERN ]]; then
+	echo "Invalid domain!"
+	exit 1;
+fi
+
+local site_root="$www_root/$domain_name"
+
+cp -Rf "$www_root/.skel/" "$site_root"
+
+$ack_grep -l SITE_ROOT $site_root/config/* | xargs -t -n 1 sed -i -e "s@SITE_ROOT@$site_root@g"
+$ack_grep -l DOMAIN_NAME $site_root/config/* | xargs -t -n 1 sed -i -e "s@DOMAIN_NAME@$domain_name@g"
+
+#
+# Create a symlink to current for the default application root
+#
+ln -sf $site_root/site $site_root/current
+
+#
+# append the application's pill to bluepill startup
+#
+echo "require $site_root/config/site.pill" | sudo tee -a /etc/bluepill/all_sites.pill
+
+sudo restart bluepill
+
+sudo /etc/init.d/nginx reload
+
+echo "Skeleton copied to \"$site_root\""

@@ -1,0 +1,32 @@
+Bluepill.application("DOMAIN_NAME") do |app|
+  app.working_dir = 'SITE_ROOT/current'
+  app.uid = 'www-data'
+  app.gid = 'www-data'
+  app.environment = `env -i BUNDLE_GEMFILE=SITE_ROOT/Gemfile bundle exec env`.lines.inject({}) do |env_hash,l|
+    kv = l.chomp.split('=',2)
+    env_hash[kv[0] = kv[1]
+    env_hash
+  end
+  app.process("unicorn") do |process|
+    process.pid_file = "SITE_ROOT/current/tmp/pids/unicorn.pid"
+    process.working_dir = SITE_ROOT
+
+    process.start_command = "exec unicorn_rails -Dc SITE_ROOT/config/unicorn.rb -E production"
+    process.stop_command = "kill -QUIT {{PID}}"
+    process.restart_command = "kill -USR2 {{PID}}"
+
+    process.uid = process.gid = 'deploy'
+
+    process.start_grace_time = 30.seconds
+    process.stop_grace_time = 30.seconds
+    process.restart_grace_time = 30.seconds
+
+
+    process.monitor_children do |child_process|
+      child_process.stop_command = "kill -QUIT {{PID}}"
+
+      child_process.checks :mem_usage, :every => 10.seconds, :below => 150.megabytes, :times => [3,4], :fires => :stop
+      child_process.checks :cpu_usage, :every => 10.seconds, :below => 20, :times => [3,4], :fires => :stop
+    end
+  end
+end
