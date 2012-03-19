@@ -1,25 +1,26 @@
-The Nginx Vhost project exists to provide a simple shell script to generate a vhost directory.
-This project is built on/for Ubuntu servers, and will likely not work on other platforms.
+Initially forked from: https://bitbucket.org/intel352/nginx-vhost/src
+
+This project provides a simple shell script to generate a vhost directory.
+This project is built on/for Ubuntu servers configured using our server setup (https://gist.github.com/2123030), and will likely not work on other platforms.
 
 Dependencies:
 ack-grep
 
 Expects script to be executed by a user that can write to /var/www.
-Expects Nginx to already be installed, and expects user to restart Nginx when the vhost is ready.
+Expects Nginx to already be installed
 
 Bottom of /etc/nginx/nginx.conf "http {" block should have a line like the following:
     include /var/www/*/config/nginx.conf;
 
 
 Example setup and usage:
-# hg clone https://bitbucket.org/alanstevens/nginx-vhost /var/www/
+# git clone git://github.com/NerdHiveIndustries/create-site.git /var/www/
 # cd /var/www/
-# chmod +x generate_vhost # Make the script executable
-# /var/www/generate_vhost test.mysite.com # Execute the script
+# chmod +x create_site # Make the script executable
+# /var/www/create_site test.mysite.com # Execute the script
 
 Files are then copied into /var/www/ (VHOSTDIR) as /var/www/test.mysite.com/
 That directory contains:
 backup/
 config/     # Per-domain nginx config is stored here
-public/
-log/
+site/

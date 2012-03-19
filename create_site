@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -e
-local domain_name=$1
+domain_name=$1
 
-local www_root="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+www_root="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd
 
-local ack_grep=`which ack-grep`
+ack_grep=`which ack-grep`
 
 if ["$ack_grep" -eq ""]; then
   ack_grep=`which ack`
@@ -24,13 +24,13 @@ fi
 #
 # Validate the domain name
 #
-local PATTERN="^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$";
+PATTERN="^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$";
 if [[ "$domain_name" =~ $PATTERN ]]; then
 	echo "Invalid domain!"
 	exit 1;
 fi
 
-local site_root="$www_root/$domain_name"
+site_root="$www_root/$domain_name"
 
 cp -Rf "$www_root/.skel/" "$site_root"
 
