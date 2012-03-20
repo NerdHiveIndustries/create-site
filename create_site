@@ -7,16 +7,16 @@ cd
 
 ack_grep=`which ack-grep`
 
-if ["$ack_grep" -eq ""]; then
+if [ "$ack_grep" = "" ]; then
   ack_grep=`which ack`
 fi
 
-if ["$ack_grep" -eq ""]; then
+if [ "$ack_grep" = "" ]; then
 	echo "ack grep not found!"
 	exit 1;
 fi
 
-if [ "$domain_name" -eq "" ] ; then
+if [ "$domain_name" = "" ] ; then
   echo -e "Specify the virtual host domain name:"
   read domain_name
 fi
@@ -25,9 +25,9 @@ fi
 # Validate the domain name
 #
 PATTERN="^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$";
-if [[ "$domain_name" =~ $PATTERN ]]; then
-	echo "Invalid domain!"
-	exit 1;
+if [[ $domain_name =~ $PATTERN ]]; then
+  echo "Invalid domain!"
+  exit 1;
 fi
 
 site_root="$www_root/$domain_name"
