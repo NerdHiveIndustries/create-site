@@ -39,7 +39,7 @@ $ack_grep -l DOMAIN_NAME $site_root/config/* | xargs -t -n 1 sed -i -e "s@DOMAIN
 #
 # Create a symlink to current for the default application root
 #
-ln -sf $site_root/site $site_root/current
+ln -sf $site_root/releases/site $site_root/current
 
 #
 # append the application's pill to bluepill startup

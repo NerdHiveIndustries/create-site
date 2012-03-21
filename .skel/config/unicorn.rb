@@ -16,20 +16,20 @@ working_directory "SITE_ROOT/current" # available in 0.94.0+
 
 # can listen on both a Unix domain socket and a TCP port,
 # we use a shorter backlog for quicker failover when busy
-listen "SITE_ROOT/current/tmp/sockets/DOMAIN_NAME.sock", :backlog => 64
+listen "SITE_ROOT/shared/tmp/sockets/DOMAIN_NAME.sock", :backlog => 64
 #listen 8080, :tcp_nopush => true
 
 # nuke workers after 30 seconds instead of 60 seconds (the default)
 timeout 30
 
 # feel free to point this anywhere accessible on the filesystem
-pid "SITE_ROOT/current/tmp/pids/unicorn.pid"
+pid "SITE_ROOT/shared/tmp/pids/unicorn.pid"
 
 # By default, the Unicorn logger will write to stderr.
 # Additionally, some applications/frameworks log to stderr or stdout,
 # so prevent them from going to /dev/null when daemonized here:
-stderr_path "SITE_ROOT/current/log/unicorn.stderr.log"
-stdout_path "SITE_ROOT/current/log/unicorn.stdout.log"
+stderr_path "SITE_ROOT/shared/log/unicorn.stderr.log"
+stdout_path "SITE_ROOT/shared/log/unicorn.stdout.log"
 
 # combine Ruby 2.0.0dev or REE with "preload_app true" for memory savings
 # http://rubyenterpriseedition.com/faq.html#adapt_apps_for_cow

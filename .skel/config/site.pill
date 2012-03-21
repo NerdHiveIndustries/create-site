@@ -8,7 +8,7 @@ Bluepill.application("DOMAIN_NAME") do |app|
     env_hash
   end
   app.process("unicorn") do |process|
-    process.pid_file = "SITE_ROOT/current/tmp/pids/unicorn.pid"
+    process.pid_file = "SITE_ROOT/shared/tmp/pids/unicorn.pid"
     process.working_dir = SITE_ROOT
 
     process.start_command = "exec unicorn_rails -Dc SITE_ROOT/config/unicorn.rb -E production"
