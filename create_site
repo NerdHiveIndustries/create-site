@@ -46,8 +46,8 @@ ln -sf $site_root/releases/site $site_root/current
 #
 echo "require $site_root/config/site.pill" | sudo tee -a /etc/bluepill/all_sites.pill
 
-sudo restart bluepill
+# sudo restart bluepill
 
-sudo /etc/init.d/nginx reload
+# sudo /etc/init.d/nginx reload
 
 echo "Skeleton copied to \"$site_root\""
